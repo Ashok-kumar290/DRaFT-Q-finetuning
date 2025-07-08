@@ -24,7 +24,7 @@ Both models were trained using the DRaFT-Q method with LoRA adapters.
 
 - `falcon-rw-1b/`: Adapter files (`adapter_model.bin`, `adapter_config.json`)
 - `llama-2-7b/`: Adapter files
-- `tBenchmarks.ipynb`: End-to-end training & evaluation in Google Colab
+- `Benchmarks.ipynb`: End-to-end training & evaluation in Google Colab
 
 ## 📜 License
 
