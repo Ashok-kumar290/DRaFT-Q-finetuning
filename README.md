@@ -15,8 +15,8 @@ It is particularly suited for low-resource hardware like Colab GPUs.
 
 | Model         | Params | Dataset Used                  | Purpose              |
 |---------------|--------|-------------------------------|----------------------|
-| Falcon-RW-1B  | 1.3B   | GitHub News Category Dataset  | Text classification  |
-| LLaMA-2-7B    | 7B     | GitHub News Category Dataset  | Text classification  |
+| Falcon-RW-1B  | 1.3B   | SQuAD v1.1                    | Q/A   |
+| LLaMA-2-7B    | 7B     | NewsSummaryMore               | Text classification  |
 
 Both models were trained using the DRaFT-Q method with LoRA adapters.
 
@@ -24,7 +24,7 @@ Both models were trained using the DRaFT-Q method with LoRA adapters.
 
 - `falcon-rw-1b/`: Adapter files (`adapter_model.bin`, `adapter_config.json`)
 - `llama-2-7b/`: Adapter files
-- `training_script.ipynb`: End-to-end training & evaluation in Google Colab
+- `tBenchmarks.ipynb`: End-to-end training & evaluation in Google Colab
 
 ## 📜 License
 
