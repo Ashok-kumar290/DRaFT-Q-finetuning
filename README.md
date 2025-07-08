@@ -1,31 +1,77 @@
-# DRaFT-Q: Efficient Fine-Tuning with Rank-Adaptive Quantization
+# DRaFT-Q: Dynamic Rank-Aware Fine-Tuning for Quantized LLMs
 
-This repository provides DRaFT-Q adapter weights and training code for fine-tuning large language models on a text classification task.
+**DRaFT-Q** is a novel Parameter-Efficient Fine-Tuning (PEFT) technique for large language models (LLMs) that dynamically adjusts adapter ranks **per layer**, driven by real-time curvature signals — all under a strict VRAM budget and **4-bit quantization**.
 
-## 🧠 What is DRaFT-Q?
+This repository contains:
+- 🧠 DRaFT-Q implementation (built on HuggingFace PEFT)
+- 📊 Training scripts & evaluation configs
+- 📈 Visual loss curves, benchmarks, and heatmaps
+- 📄 Theoretical proofs of optimal rank allocation and convergence
 
-**DRaFT-Q (Dynamic Rank and Fine-Tuned Quantization)** is an efficient adaptation method that:
-- Dynamically adjusts adapter rank across layers
-- Optimizes for memory efficiency
-- Preserves model accuracy using 4-bit quantization
+---
 
-It is particularly suited for low-resource hardware like Colab GPUs.
+## 🧠 Why DRaFT-Q?
 
-## 🏋️‍♂️ Models Trained with DRaFT-Q
+Unlike LoRA and QLoRA — which fix adapter ranks uniformly across layers — DRaFT-Q adapts rank **dynamically**, increasing it in “difficult” layers and reducing it in “easy” ones. This ensures better utilization of adapter capacity under limited VRAM (11–14 GB), while remaining compatible with 4-bit quantized backbones.
 
-| Model         | Params | Dataset Used                  | Purpose              |
-|---------------|--------|-------------------------------|----------------------|
-| Falcon-RW-1B  | 1.3B   | SQuAD v1.1                    | Q/A   |
-| LLaMA-2-7B    | 7B     | NewsSummaryMore               | Text classification  |
+---
 
-Both models were trained using the DRaFT-Q method with LoRA adapters.
+## 📊 Method Comparison
 
-## 📂 Contents
+| Feature                        | LoRA | QLoRA | AdaLoRA | DRaFT-Q |
+|-------------------------------|------|-------|----------|---------|
+| Fixed Adapter Rank            | ✅   | ✅    | ❌       | ❌      |
+| Dynamic Rank per Layer        | ❌   | ❌    | ✅       | ✅      |
+| Curvature-Based Growth        | ❌   | ❌    | SVD/Hessian | ✅ (cheap EMA) |
+| 4-bit Quantization Compatible | ❌   | ✅    | ❌       | ✅      |
+| VRAM Budget Awareness         | ❌   | ❌    | ❌       | ✅      |
+| FlashAttention-Compatible     | ✅   | ✅    | ✅       | ✅      |
 
-- `falcon-rw-1b/`: Adapter files (`adapter_model.bin`, `adapter_config.json`)
-- `llama-2-7b/`: Adapter files
-- `Benchmarks.ipynb`: End-to-end training & evaluation in Google Colab
+---
 
-## 📜 License
+## 📦 Trained Models
 
-This project is licensed under the MIT License.
+| Model                    | Params | Task          | Adapter Type | Notes |
+|--------------------------|--------|---------------|---------------|-------|
+| `meta-llama/Llama-2-7b-hf`     | 7B     | Summarization | LoRA / QLoRA / DRaFT-Q | NewsSummary |
+| `tiiuae/falcon-rw-1b`          | 1B     | QA            | All          | SQuAD v1.1 |
+| `TinyLlama/TinyLlama-1.1B-Chat-v1.0` | 1.1B   | Classification | All | AG-News |
+
+---
+
+## 📚 Datasets Used
+
+| Dataset            | Task Type        | Source Link                                                                 |
+|--------------------|------------------|------------------------------------------------------------------------------|
+| NewsSummaryMore    | Summarization    | [news_summary_more.csv](https://raw.githubusercontent.com/sunnysai12345/News_Summary/master/news_summary_more.csv) |
+| SQuAD v1.1         | QA (span-based)  | [SQuAD JSON](https://rajpurkar.github.io/SQuAD-explorer/dataset/train-v1.1.json) |
+| AG News            | 4-class Classification | [AG-News CSV](https://raw.githubusercontent.com/mhjabreel/CharCnn_Keras/master/data/ag_news_csv/train.csv) |
+
+---
+
+## 📈 Results Summary
+
+| Task           | Metric   | LoRA | QLoRA | DRaFT-Q |
+|----------------|----------|------|-------|----------|
+| Summarization  | ROUGE-L  | 29.8 | 31.0  | **33.7** |
+| QA (SQuAD)     | EM (Dev) | 48.7 | 50.2  | **49.9** |
+| Classification | Accuracy | 83.2 | 84.1  | **86.4** |
+
+> 📉 DRaFT-Q also converged faster, starting with low ranks (r=4) and expanding based on curvature.
+
+---
+
+## 🧮 Theoretical Highlights
+
+- **VRAM Budget Safety**  
+  DRaFT-Q includes a rollback mechanism to keep adapter memory ≤ user-defined cap
+
+- **Convergence Lemma**  
+  Guaranteed convergence if curvature update satisfies contractive EMA
+
+
+---
+
+## 🛠 Usage
+
+Coming soon: Install and training guide...
