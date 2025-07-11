@@ -74,9 +74,6 @@
 
 ## 📈 Visuals (Phase 2)
 
-### 🔹 DRaFT-Q vs LoRA vs QLoRA – Accuracy (Falcon-rw-1b)
-![Accuracy Benchmark](assets/falcon_accuracy.png)
-
 ### 🔹 GPU Usage Graph – DRaFT-Q
 ![DRaFT-Q GPU](assets/gpu_draftq.png)
 
