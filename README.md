@@ -90,11 +90,6 @@
 
 ## 🧠 Theoretical Highlights
 
-- **Optimal Rank Allocation**
-  \[
-  r_\ell^* = \left\lfloor R_{tot} \cdot \frac{\Delta_\ell}{\sum_j \Delta_j} \right\rceil
-  \]
-
 - **VRAM Budget Safety**
   DRaFT-Q rolls back ranks when adapter size exceeds user-defined GPU cap.
 
